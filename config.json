@@ -1,0 +1,44 @@
+{
+  "meta": {
+    "siteTitle": "valentine"
+  },
+  "person": {
+    "name": "Dilzy"
+  },
+  "pages": {
+    "index": {
+      "title": "Do you love me? 🤗",
+      "subtitle": "I'm all yours"
+    },
+    "no1": {
+      "title": "Please think again! 🙄",
+      "subtitle": "itni jaldi na matt bolo😥"
+    },
+    "no2": {
+      "title": "Ek aur baar Soch lo! 😣",
+      "subtitle": "kyu aisa kar rahi ho Plzzz Man jao😣"
+    },
+    "no3": {
+      "title": "Baby Man jao na! Kitna bhav khaogi 😭",
+      "subtitle": "bhut glt baat hai yrr😭"
+    },
+    "yes": {
+      "title": "I knew it! You Love me a lot 😘"
+    }
+  },
+  "celebration": {
+    "envelopeTitle": "Tap the Envelope",
+    "envelopeSubtitle": "Your letter is waiting inside",
+    "letter": {
+      "title": "My Love",
+      "body": "You are my peace, my smile, and my forever favorite person. Every day with you feels like magic. I love you endlessly.",
+      "tapHint": "Tap letter to reveal your couple coupon"
+    },
+    "ticket": {
+      "title": "Ticket for {name}",
+      "line1": "Special Couple",
+      "line2": "Get unlimited hugs and kiss",
+      "line3": "Validity: Unlimited"
+    }
+  }
+}

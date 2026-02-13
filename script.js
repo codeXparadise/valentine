@@ -3,10 +3,107 @@ const isMobileDevice =
   window.matchMedia("(pointer: coarse)").matches;
 
 let celebrationLocked = false;
+const DEFAULT_CONFIG = {
+  meta: {
+    siteTitle: "valentine",
+  },
+  person: {
+    name: "Dilzy",
+  },
+  pages: {
+    index: {
+      title: "Do you love me? 🤗",
+      subtitle: "I'm all yours",
+    },
+    no1: {
+      title: "Please think again! 🙄",
+      subtitle: "itni jaldi na matt bolo😥",
+    },
+    no2: {
+      title: "Ek aur baar Soch lo! 😣",
+      subtitle: "kyu aisa kar rahi ho Plzzz Man jao😣",
+    },
+    no3: {
+      title: "Baby Man jao na! Kitna bhav khaogi 😭",
+      subtitle: "bhut glt baat hai yrr😭",
+    },
+    yes: {
+      title: "I knew it! You Love me a lot 😘",
+    },
+  },
+  celebration: {
+    envelopeTitle: "Tap the Envelope",
+    envelopeSubtitle: "Your letter is waiting inside",
+    letter: {
+      title: "My Love",
+      body: "You are my peace, my smile, and my forever favorite person. Every day with you feels like magic. I love you endlessly.",
+      tapHint: "Tap letter to reveal your couple coupon",
+    },
+    ticket: {
+      title: "Ticket for {name}",
+      line1: "Special Couple",
+      line2: "Get unlimited hugs and kiss",
+      line3: "Validity: Unlimited",
+    },
+  },
+};
+
+let appConfig = DEFAULT_CONFIG;
+
+function replaceTokens(text, values) {
+  return String(text || "").replace(/\{(\w+)\}/g, (_, key) => values[key] ?? "");
+}
+
+async function loadConfig() {
+  try {
+    const response = await fetch("./config.json", { cache: "no-store" });
+    if (!response.ok) return DEFAULT_CONFIG;
+    const json = await response.json();
+    return {
+      ...DEFAULT_CONFIG,
+      ...json,
+      meta: { ...DEFAULT_CONFIG.meta, ...(json.meta || {}) },
+      person: { ...DEFAULT_CONFIG.person, ...(json.person || {}) },
+      pages: { ...DEFAULT_CONFIG.pages, ...(json.pages || {}) },
+      celebration: {
+        ...DEFAULT_CONFIG.celebration,
+        ...(json.celebration || {}),
+        letter: {
+          ...DEFAULT_CONFIG.celebration.letter,
+          ...(json.celebration?.letter || {}),
+        },
+        ticket: {
+          ...DEFAULT_CONFIG.celebration.ticket,
+          ...(json.celebration?.ticket || {}),
+        },
+      },
+    };
+  } catch (_) {
+    return DEFAULT_CONFIG;
+  }
+}
+
+function applyPageConfig(config) {
+  const pageKey = document.body.dataset.page;
+  const pageConfig = config.pages?.[pageKey];
+  if (!pageConfig) return;
+
+  const titleNode = document.querySelector('[data-role="title"]');
+  const subtitleNode = document.querySelector('[data-role="subtitle"]');
+
+  if (titleNode && pageConfig.title) titleNode.textContent = pageConfig.title;
+  if (subtitleNode && pageConfig.subtitle) subtitleNode.textContent = pageConfig.subtitle;
+  if (config.meta?.siteTitle) document.title = config.meta.siteTitle;
+}
 
 function createCelebrationOverlay() {
   const existingOverlay = document.querySelector("#celebrate-overlay");
   if (existingOverlay) existingOverlay.remove();
+
+  const personName = appConfig.person?.name || "Dilzy";
+  const celebration = appConfig.celebration || DEFAULT_CONFIG.celebration;
+  const letter = celebration.letter || DEFAULT_CONFIG.celebration.letter;
+  const ticket = celebration.ticket || DEFAULT_CONFIG.celebration.ticket;
 
   const overlay = document.createElement("div");
   overlay.className = "celebrate-overlay";
@@ -15,26 +112,25 @@ function createCelebrationOverlay() {
     <div class="firework-stage" id="firework-stage"></div>
     <button class="celebrate-close" id="celebrate-close" type="button" aria-label="Close">×</button>
     <div class="envelope-wrap" id="envelope-wrap">
-      <h2>Tap the Envelope</h2>
-      <p>Your letter is waiting inside</p>
+      <h2>${celebration.envelopeTitle}</h2>
+      <p>${celebration.envelopeSubtitle}</p>
       <div class="envelope-scene" id="envelope-scene">
         <div class="letter-paper" id="letter-paper">
-          <h3>My Love</h3>
+          <h3>${letter.title}</h3>
           <p>
-            You are my peace, my smile, and my forever favorite person.
-            Every day with you feels like magic. I love you endlessly.
+            ${letter.body}
           </p>
-          <p class="tap-note">Tap letter to reveal your couple coupon</p>
+          <p class="tap-note">${letter.tapHint}</p>
         </div>
         <div class="envelope-icon" id="envelope-icon" role="button" aria-label="Open envelope"></div>
       </div>
     </div>
     <div class="ticket-wrap" id="ticket-wrap">
       <div class="ticket-card">
-        <h2>Ticket for Dilzy</h2>
-        <p>Special Couple</p>
-        <p>Get unlimited hugs and kiss</p>
-        <p>Validity: Unlimited</p>
+        <h2>${replaceTokens(ticket.title, { name: personName })}</h2>
+        <p>${ticket.line1}</p>
+        <p>${ticket.line2}</p>
+        <p>${ticket.line3}</p>
       </div>
     </div>
   `;
@@ -268,8 +364,10 @@ function wireSmoothNavigation() {
   });
 }
 
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", async () => {
   const loader = createLoader();
+  appConfig = await loadConfig();
+  applyPageConfig(appConfig);
 
   preloadInternalLinks();
   wireNoButtons();

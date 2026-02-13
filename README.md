@@ -2,6 +2,10 @@
 
 A playful, animated Valentine proposal web project with responsive UI, mobile-friendly behavior, and an interactive celebration flow.
 
+## Live Config Driven
+
+This project now reads editable content from `config.json`, so you can update names, messages, letter text, and coupon details from one place.
+
 ## Highlights
 
 - Responsive layout for desktop and mobile
@@ -20,6 +24,7 @@ A playful, animated Valentine proposal web project with responsive UI, mobile-fr
 - `index.html` – landing page
 - `no1.html`, `no2.html`, `no3.html` – no-flow pages
 - `yes.html` – yes response page
+- `config.json` – editable content source (name, page texts, letter, coupon details)
 - `style.css` – all shared styling, animations, responsive rules
 - `script.js` – interactions, transitions, preloading, celebration logic
 
@@ -41,11 +46,37 @@ Then open: `http://localhost:5500`
 
 ## Customization
 
-- Update texts directly in the HTML pages.
+- Edit `config.json` to change all core texts without touching code:
+  - `person.name`
+  - `pages.index/no1/no2/no3/yes`
+  - `celebration.letter.*`
+  - `celebration.ticket.*`
+  - `ticket.title` supports `{name}` token, e.g. `Ticket for {name}`
 - Tune animation and theme variables in `style.css`.
 - Modify behavior in `script.js`:
   - `wireNoButtons()` for No-button logic
   - `runCelebrationFlow()` for Yes-flow sequence
+
+### `config.json` quick map
+
+- `meta.siteTitle` → browser tab title
+- `person.name` → used inside coupon via `{name}` token
+- `pages.*` → per-page heading/subheading text
+- `celebration.*` → envelope title/subtitle, letter content, ticket lines
+
+## GitHub Publish
+
+```bash
+git add .
+git commit -m "Update valentine project"
+gh repo create valentine --source . --remote origin --public --push
+```
+
+If the repo already exists, use:
+
+```bash
+git push -u origin main
+```
 
 ## License
 
