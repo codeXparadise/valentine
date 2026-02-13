@@ -100,6 +100,27 @@ This repo is ready for Netlify deployment.
 
 No build command is required because this is a static site.
 
+## Changelog
+
+### 2026-02-13
+
+- Added central `config.json` to control name, page text, letter text, and coupon details.
+- Wired all pages to load content from `config.json` using `script.js` defaults as fallback.
+- Fixed deployed `Yes` click behavior by making celebration trigger robust for Netlify URL formats.
+- Added explicit `yes-btn` markers in proposal pages for reliable event handling.
+- Added `netlify.toml` and `.gitignore` for clean static deployment setup.
+- Added cache-control rules for `*.html`, `script.js`, and `config.json` to reduce stale-deploy issues.
+
+## Deployment Parity (Local = Netlify)
+
+To ensure deployed behavior matches local behavior:
+
+1. Keep `config.json` in the repository root.
+2. Keep all page links as relative links (already configured).
+3. Use Netlify deploy from the `main` branch.
+4. After each deploy, open the site with hard refresh once (`Ctrl+F5`) if browser cache is old.
+5. Confirm latest deploy status is **Published** in Netlify before testing.
+
 ## License
 
 Personal/demo use.
