@@ -3,6 +3,7 @@ const isMobileDevice =
   window.matchMedia("(pointer: coarse)").matches;
 
 let celebrationLocked = false;
+const THEME_STORAGE_KEY = "valentine-theme";
 const DEFAULT_CONFIG = {
   meta: {
     siteTitle: "valentine",
@@ -94,6 +95,43 @@ function applyPageConfig(config) {
   if (titleNode && pageConfig.title) titleNode.textContent = pageConfig.title;
   if (subtitleNode && pageConfig.subtitle) subtitleNode.textContent = pageConfig.subtitle;
   if (config.meta?.siteTitle) document.title = config.meta.siteTitle;
+}
+
+function getInitialTheme() {
+  try {
+    const savedTheme = localStorage.getItem(THEME_STORAGE_KEY);
+    if (savedTheme === "light" || savedTheme === "dark") return savedTheme;
+  } catch (_) {
+  }
+
+  return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+}
+
+function setTheme(theme) {
+  document.body.classList.toggle("theme-dark", theme === "dark");
+
+  try {
+    localStorage.setItem(THEME_STORAGE_KEY, theme);
+  } catch (_) {
+  }
+
+  const toggleIcon = document.querySelector(".theme-toggle-icon");
+  if (toggleIcon) toggleIcon.textContent = theme === "dark" ? "☀️" : "🌙";
+}
+
+function createThemeToggle() {
+  const toggle = document.createElement("button");
+  toggle.type = "button";
+  toggle.className = "theme-toggle";
+  toggle.setAttribute("aria-label", "Toggle dark and light mode");
+  toggle.innerHTML = '<span class="theme-toggle-icon" aria-hidden="true">🌙</span>';
+
+  toggle.addEventListener("click", () => {
+    const nextTheme = document.body.classList.contains("theme-dark") ? "light" : "dark";
+    setTheme(nextTheme);
+  });
+
+  document.body.appendChild(toggle);
 }
 
 function createCelebrationOverlay() {
@@ -379,6 +417,8 @@ function wireSmoothNavigation() {
 
 document.addEventListener("DOMContentLoaded", async () => {
   const loader = createLoader();
+  createThemeToggle();
+  setTheme(getInitialTheme());
   appConfig = await loadConfig();
   applyPageConfig(appConfig);
 

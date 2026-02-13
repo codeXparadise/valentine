@@ -11,6 +11,7 @@ This project now reads editable content from `config.json`, so you can update na
 - Responsive layout for desktop and mobile
 - Smooth page transitions and preloading behavior
 - Rounded animated buttons with hover effects
+- Cute dark/light mode toggle button with saved preference
 - Mobile-only `No` button dodge behavior
 - `Yes` flow celebration:
   - Firecracker burst animation
@@ -110,6 +111,7 @@ No build command is required because this is a static site.
 - Added explicit `yes-btn` markers in proposal pages for reliable event handling.
 - Added `netlify.toml` and `.gitignore` for clean static deployment setup.
 - Added cache-control rules for `*.html`, `script.js`, and `config.json` to reduce stale-deploy issues.
+- Added global dark/light mode toggle with localStorage persistence across pages.
 
 ## Deployment Parity (Local = Netlify)
 

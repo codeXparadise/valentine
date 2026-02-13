@@ -18,6 +18,19 @@
     --shadow-hover: 0 20px 45px rgba(78, 33, 94, 0.24);
 }
 
+body.theme-dark {
+    --bg-start: #201428;
+    --bg-mid: #2d1a36;
+    --bg-end: #1a1122;
+    --card-bg: rgba(39, 25, 49, 0.72);
+    --text-main: #f6e9ff;
+    --text-soft: #dac5e7;
+    --btn-yes: #3a2448;
+    --btn-no: #4a2d56;
+    --shadow-main: 0 14px 35px rgba(0, 0, 0, 0.35);
+    --shadow-hover: 0 20px 45px rgba(0, 0, 0, 0.45);
+}
+
 body {
     width: 100%;
     min-height: 100vh;
@@ -486,4 +499,41 @@ body.scene-yes {
         animation: none !important;
         transition: none !important;
     }
+}
+
+.theme-toggle {
+    position: fixed;
+    top: 14px;
+    right: 14px;
+    z-index: 980;
+    width: 46px;
+    height: 46px;
+    border: 0;
+    border-radius: 999px;
+    cursor: pointer;
+    display: grid;
+    place-items: center;
+    background: rgba(255, 255, 255, 0.88);
+    color: #2b1734;
+    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.18);
+    transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+}
+
+body.theme-dark .theme-toggle {
+    background: rgba(55, 34, 68, 0.95);
+    color: #ffe69a;
+}
+
+.theme-toggle:hover {
+    transform: translateY(-1px) scale(1.04);
+    box-shadow: 0 14px 26px rgba(0, 0, 0, 0.24);
+}
+
+.theme-toggle:active {
+    transform: scale(0.96);
+}
+
+.theme-toggle-icon {
+    font-size: 1.15rem;
+    line-height: 1;
 }
