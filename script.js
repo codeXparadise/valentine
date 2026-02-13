@@ -336,13 +336,26 @@ function wireNoButtons() {
   });
 }
 
+function isYesLink(anchor, href) {
+  if (anchor.classList.contains("yes-btn")) return true;
+
+  try {
+    const parsedUrl = new URL(href, window.location.href);
+    const path = parsedUrl.pathname.toLowerCase();
+    return path.endsWith("/yes") || path.endsWith("/yes.html");
+  } catch (_) {
+    const cleanedHref = String(href || "").toLowerCase().replace(/^\.\//, "");
+    return cleanedHref === "yes" || cleanedHref === "yes.html";
+  }
+}
+
 function wireSmoothNavigation() {
   document.querySelectorAll("a[href]").forEach((anchor) => {
     anchor.addEventListener("click", (event) => {
       const href = anchor.getAttribute("href");
       if (!href || href.startsWith("#") || href.startsWith("http")) return;
 
-      if (href === "yes.html") {
+      if (isYesLink(anchor, href)) {
         event.preventDefault();
         runCelebrationFlow();
         return;
